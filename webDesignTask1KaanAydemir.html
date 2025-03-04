@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Test</title>
+    <style>
+
+        .batman-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #e6b800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(230, 184, 0, 0.4);
+        }
+
+        .batman-label {
+            font-family: 'Oswald', sans-serif;
+            color: #b8c5d1; 
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            text-align: left;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .batman-btn {
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111520;
+            margin: 0;
+            overflow: hidden;
+            transition: background 1s ease-in-out;
+            font-family: 'Oswald', sans-serif; 
+        }
+
+        
+        .batman-logo-button {
+            width: 220px;
+            height: 90px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            margin-top: 70px; 
+        }
+
+        .batman-logo-button .logo-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        
+        .batman-logo-btn {
+            position: relative;
+            width: 180px;
+            height: 50px;
+            background: #e6b800; 
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .batman-logo-btn::before,
+        .batman-logo-btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            width: 80px;
+            height: 45px;
+            background: #4b6a8c;
+            border-radius: 50%;
+        }
+
+        .batman-logo-btn::before {
+            left: -38px;
+            transform: rotate(210deg);
+            background: #111520; 
+        }
+
+        .batman-logo-btn::after {
+            right: -38px;
+            transform: rotate(150deg);
+            background: #111520; 
+        }
+
+        .wing-left-btn,
+        .wing-right-btn {
+            position: absolute;
+            bottom: -10px;
+            width: 75px;
+            height: 30px;
+            background: #4b6a8c;
+            border-radius: 50%;
+            background: #111520; 
+            transform: rotate(180deg);
+        }
+
+        .wing-left-btn {
+            left: 22px;
+            transform: rotate(180deg);
+        }
+
+        .wing-right-btn {
+            right: 22px;
+            transform: rotate(180deg);
+        }
+
+        .batman-head-btn {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 32px;
+            background: #4b6a8c;
+            border-radius: 50%;
+            background: #111520; 
+        }
+
+        .ear-btn {
+            position: absolute;
+            top: 3px;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 27px solid #e6b800; 
+        }
+
+        .ear-btn.left {
+            left: 44%;
+            transform: rotate(16deg);
+        }
+
+        .ear-btn.right {
+            right: 44%;
+            transform: rotate(-16deg);
+        }
+
+        
+        .batman-logo-button::after {
+            content: '';
+            position: absolute;
+            top: calc(50% - 10px);
+            left: 50%;
+            width: 350px;
+            height: 220px;
+            border-radius: 50%;
+            border: 2px solid rgba(230, 184, 0, 0.7); 
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+            z-index: -1;
+        }
+
+        .batman-logo-button::before {
+            content: '';
+            position: absolute;
+            top: calc(50% - 10px);
+            left: 50%;
+            width: 450px;
+            height: 260px;
+            border-radius: 50%;
+            border: 2px solid rgba(230, 184, 0, 0.5); 
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite 0.3s;
+            z-index: -1;
+        }
+
+        
+        .wave-outer {
+            content: '';
+            position: absolute;
+            top: calc(50% - 10px);
+            left: 50%;
+            width: 550px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid rgba(230, 184, 0, 0.3); 
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite 0.6s;
+            z-index: -1;
+        }
+
+        
+        .wave-outermost {
+            content: '';
+            position: absolute;
+            top: calc(50% - 10px);
+            left: 50%;
+            width: 650px;
+            height: 340px;
+            border-radius: 50%;
+            border: 2px solid rgba(230, 184, 0, 0.2); 
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite 0.9s;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        
+        .batman-logo-button:hover .batman-logo-btn {
+            transform: scale(1.1);
+        }
+
+        
+        .transition-gif {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 100;
+            pointer-events: none;
+            display: none;
+        }
+
+        .transition-gif.active {
+            display: block;
+        }
+
+        
+        .fade-background {
+            position: relative;
+        }
+
+        .fade-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGVsMXVhYjc0Mm50ZW45bWp4aW9tNzdpYm0xYXhoMm1hanRpeTRlNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l396BoOTIFem9xqQU/giphy.gif');
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: -1;
+            animation: fadeInBackground 1s ease-in-out forwards;
+        }
+
+        @keyframes fadeInBackground {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.7; 
+            }
+        }
+
+        
+        .center-container {
+            width: 600px;
+            padding: 40px;
+            background: #151c2c; 
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8); 
+            opacity: 0;
+            display: none;
+            animation: fadeIn 1s ease-in-out forwards;
+            text-align: center;
+            position: absolute;
+            border: 1px solid #2a3550; 
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        .batman-logo {
+            position: relative;
+            width: 180px;
+            height: 50px;
+            background: #e6b800; 
+            margin: 0 auto 30px;
+        }
+
+        .batman-logo::before,
+        .batman-logo::after {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            width: 80px;
+            height: 45px;
+            background: #4b6a8c;
+            border-radius: 50%;
+        }
+
+        .batman-logo::before {
+            left: -35px;
+            transform: rotate(210deg);
+            background: #151c2c; 
+        }
+
+        .batman-logo::after {
+            right: -35px;
+            transform: rotate(150deg);
+            background: #151c2c; 
+        }
+
+        .wing-left,
+        .wing-right {
+            position: absolute;
+            bottom: -10px;
+            width: 70px;
+            height: 29px;
+            background: #4b6a8c;
+            border-radius: 50%;
+            background: #151c2c; 
+            transform: rotate(180deg);
+        }
+
+        .wing-left {
+            left: 22px;
+            transform: rotate(180deg);
+        }
+
+        .wing-right {
+            right: 22px;
+            transform: rotate(180deg);
+        }
+
+        .batman-head {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 30px;
+            background: #4b6a8c;
+            border-radius: 50%;
+            background: #151c2c; 
+        }
+
+        .ear {
+            position: absolute;
+            top: 4px;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 24px solid #e6b800; 
+        }
+
+        .ear.left {
+            left: 44%;
+            transform: rotate(16deg);
+        }
+
+        .ear.right {
+            right: 44%;
+            transform: rotate(-16deg);
+        }
+
+        
+        .form-control {
+            border-radius: 8px;
+            background-color: #1e2940; 
+            color: #e6e6e6; 
+            border: 1px solid #364863; 
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .form-control:focus {
+            background-color: #253450; 
+            border-color: #4b6a8c; 
+            box-shadow: 0 0 0 0.25rem rgba(60, 85, 112, 0.25); 
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #304257; 
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            color: #e6b800; 
+        }
+
+        .btn-primary:hover {
+            background-color: #3d5269; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+        }
+
+
+        label {
+            color: #b8c5d1; 
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            text-align: left;
+            display: block;
+            font-family: 'Oswald', sans-serif;
+        }
+
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+        
+
+        .preload-images {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+ 
+    <div class="preload-images">
+        <img src="https://media1.tenor.com/m/li3_QZdEeWAAAAAC/batman-tothebatmobile.gif" alt="preload">
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGVsMXVhYjc0Mm50ZW45bWp4aW9tNzdpYm0xYXhoMm1hanRpeTRlNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l396BoOTIFem9xqQU/giphy.gif" alt="preload">
+    </div>
+
+  
+    <button class="batman-logo-button" id="triggerButton" onclick="triggerLogin()">
+        <div class="logo-container">
+            <div class="batman-logo-btn">
+                <div class="batman-head-btn"></div>
+                <div class="wing-left-btn"></div>
+                <div class="wing-right-btn"></div>
+                <div class="ear-btn left"></div>
+                <div class="ear-btn right"></div>
+            </div>
+        </div>
+
+        <div class="wave-outer"></div>
+
+        <div class="wave-outermost"></div>
+    </button>
+    
+
+    <div class="transition-gif" id="transitionGif"></div>
+
+    
+    <div class="center-container" id="loginForm">
+        <div class="batman-logo">
+            <div class="batman-head"></div>
+            <div class="wing-left"></div>
+            <div class="wing-right"></div>
+            <div class="ear left"></div>
+            <div class="ear right"></div>
+        </div>
+
+
+        <h2 class="batman-title">Login</h2>
+
+
+        <form class="p-3">
+            <div class="form-group mb-3">
+                <label for="exampleInputEmail1" class="batman-label">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="form-group mb-3">
+                <label for="exampleInputPassword1" class="batman-label">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary batman-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let firstGifComplete = false;
+        let transitionImg = new Image();
+        
+        window.onload = function() {
+
+            transitionImg.src = "https://media1.tenor.com/m/li3_QZdEeWAAAAAC/batman-tothebatmobile.gif";
+            document.getElementById('transitionGif').style.backgroundImage = `url('${transitionImg.src}')`;
+            
+            
+            transitionImg.onload = function() {
+                
+            }
+        }
+        
+        function triggerLogin() {
+
+            document.getElementById('triggerButton').classList.add('hidden');
+            
+
+            const transitionGif = document.getElementById('transitionGif');
+            transitionGif.classList.add('active');
+            
+
+            setTimeout(function() {
+
+                transitionGif.classList.remove('active');
+                
+
+                document.body.classList.add('fade-background');
+                
+
+                setTimeout(function() {
+                    const loginForm = document.getElementById('loginForm');
+                    loginForm.style.display = 'block';
+                }, 1000);
+                
+            }, 1300); 
+        }
+    </script>
+
+</body>
+</html>
