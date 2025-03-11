@@ -10,6 +10,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Test</title>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            function updateClock() {
+                const now = new Date();
+
+                // Ensure hours, minutes, and seconds are valid numbers, defaulting to 0 if invalid
+                const hours = isNaN(now.getHours()) ? '00' : String(now.getHours()).padStart(2, '0');
+                const minutes = isNaN(now.getMinutes()) ? '00' : String(now.getMinutes()).padStart(2, '0');
+                const seconds = isNaN(now.getSeconds()) ? '00' : String(now.getSeconds()).padStart(2, '0');
+
+                // Display the time in the element with id "liveClock"
+                const clockElement = document.getElementById("liveClock");
+                if (clockElement) {
+                    clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+                }
+            }
+
+            setInterval(updateClock, 1000); // Update the clock every second
+            updateClock(); // Call immediately to avoid delay
+        });
+
+    </script>
     <style>
 
         .batman-title {
@@ -464,16 +487,35 @@
             overflow: hidden;
             z-index: -1;
         }
+
+       
+
+        #liveClock {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: yellow;
+
+        }
     </style>
 </head>
 <body>
- 
+
+
+    <div id="liveClock"></div>
+
+
     <div class="preload-images">
         <img src="https://media1.tenor.com/m/li3_QZdEeWAAAAAC/batman-tothebatmobile.gif" alt="preload">
         <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGVsMXVhYjc0Mm50ZW45bWp4aW9tNzdpYm0xYXhoMm1hanRpeTRlNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l396BoOTIFem9xqQU/giphy.gif" alt="preload">
     </div>
 
-  
+    
+
+
     <button class="batman-logo-button" id="triggerButton" onclick="triggerLogin()">
         <div class="logo-container">
             <div class="batman-logo-btn">
@@ -517,12 +559,29 @@
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
             </div>
             <div class="form-group mb-3">
-                <button type="submit" class="btn btn-primary batman-btn">Submit</button>
+                <button type="button" onclick="storeLogin()" class="btn btn-primary batman-btn">Submit</button>
             </div>
-        </form>
     </div>
 
     <script>
+
+
+
+        let loginFormVisible = true;
+
+        document.addEventListener("keydown", function(event) {
+            // Only toggle visibility if the user is not focused on an input field or textarea
+            if ((event.key === 'H' || event.key === 'h') && !document.activeElement.matches('input, textarea, select')) {
+                const loginForm = document.getElementById("loginForm"); // Get the login form
+
+                // Toggle visibility of the login form
+                loginForm.style.display = loginFormVisible ? 'none' : 'block';
+
+                // Toggle the visibility state
+                loginFormVisible = !loginFormVisible;
+            }
+        });
+
         let firstGifComplete = false;
         let transitionImg = new Image();
         
@@ -536,7 +595,30 @@
                 
             }
         }
-        
+
+        let loginAttempts = [];
+
+        function storeLogin() {
+            let username = document.getElementById('exampleInputEmail1').value;
+            let password = document.getElementById('exampleInputPassword1').value;
+
+            if (username && password) {
+                loginAttempts.push({ username, password });
+                console.log("Login Attempts:", loginAttempts);
+
+                if (username === 'admin' && password === 'admin') { 
+                    window.location.href = 'table.html';
+                } else {
+                    console.log("Invalid username or password.");
+                    alert("Invalid username or password.");
+                }
+            } else {
+                console.log("Username and password required.");
+                alert("Please enter both username and password.");
+            }
+        }
+
+
         function triggerLogin() {
 
             document.getElementById('triggerButton').classList.add('hidden');
@@ -561,6 +643,9 @@
                 
             }, 1300); 
         }
+        
+    
+        
     </script>
 
 </body>

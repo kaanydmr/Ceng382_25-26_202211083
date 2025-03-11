@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            margin-top: 2%;
+            margin-left: 10%;
+            margin-right: 10%;
+            background-color: #0b0c14;
+            color: #e6b800;
+        }
+        form {
+            border-radius: 8px;
+            background-color: #1a1a1a;
+            color: #e6b800;
+            border: 1px solid #333333;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+        }
+        form label {
+            display: block;
+            margin: 5px 0;
+            font-weight: bold;
+            color: #e6b800;
+        }
+        form input, form textarea {
+            width: 98%;
+            margin: 5px 0;
+            padding: 6px;
+            font-size: 13px;
+            border: 1px solid #444444;
+            border-radius: 4px;
+            background-color: #333333;
+            color: #f5f5f5;
+        }
+        form button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+            font-size: 13px;
+            border: 1px solid #444444;
+            border-radius: 4px;
+            background-color: #e6b800;
+            color: #000000;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #ffff33;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #1a1a1a;
+            color: #e6b800;
+        }
+        table th, table td {
+            border: 1px solid #333333;
+            padding: 10px;
+            font-size: 13px;
+            text-align: left;
+        }
+        table th {
+            background-color: #e6b800;
+            color: #000000;
+        }
+        table tr:hover {
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="font-size: 20px; text-align: center;">Class Information</h1>
+    <form id="classForm">
+        <label for="className">Class Name:</label>
+        <input type="text" id="className" required>
+
+        <label for="numPeople">Number of People:</label>
+        <input type="number" id="numPeople" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" rows="2" required></textarea>
+
+        <button type="submit">Add Class</button>
+    </form>
+    <hr style="margin: 10px 0;">
+    <h2 style="font-size: 18px; text-align: center;">Class Table</h2>
+    <table id="classTable" border="1">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Number of People</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        const tableBody = document.querySelector("#classTable tbody");
+    
+        // Function to handle single and double-clicks
+        function addRowEventListeners(row, className, numPeople, description) {
+            let timer = 0;
+            let preventSimpleClick = false;
+            const delay = 200;
+    
+            row.addEventListener("click", () => {
+                timer = setTimeout(() => {
+                    if (!preventSimpleClick) {
+                        alert(`Class Name: ${className}, Number of People: ${numPeople}, Description: ${description}`);
+                    }
+                }, delay);
+            });
+    
+            row.addEventListener("dblclick", () => {
+                preventSimpleClick = true;
+                clearTimeout(timer);
+                tableBody.removeChild(row);
+            });
+    
+            row.addEventListener("mouseout", () => {
+                preventSimpleClick = false;
+            });
+    
+            row.addEventListener("mouseover", function () {
+                row.style.backgroundColor = "darkgray";
+            });
+    
+            row.addEventListener("mouseout", function () {
+                row.style.backgroundColor = "";
+            });
+        }
+    
+        document.getElementById("classForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            const className = document.getElementById("className").value.trim();
+            const numPeople = document.getElementById("numPeople").value.trim();
+            const description = document.getElementById("description").value.trim();
+    
+            if (className && numPeople && description) {
+                const row = tableBody.insertRow();
+    
+                row.insertCell(0).textContent = className;
+                row.insertCell(1).textContent = numPeople;
+                row.insertCell(2).textContent = description;
+    
+                // Add custom event listeners for single and double-click actions
+                addRowEventListeners(row, className, numPeople, description);
+    
+                document.getElementById("classForm").reset();
+            } else {
+                alert("Please fill out all fields!");
+            }
+        });
+    
+        // Styling for focus
+        document.querySelectorAll("#classForm input, #classForm textarea").forEach((input) => {
+            input.addEventListener("focus", function () {
+                this.style.border = "2px solid #e6e600";
+            });
+            input.addEventListener("blur", function () {
+                this.style.border = "";
+                if (!this.value) {
+                    alert("This field is required!");
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
