@@ -1,0 +1,152 @@
+/*promt:
+@page "{editId?}" @model IndexModel @{ ViewData["Title"] = "Home page"; } <div class="row"> <div class="col-md-6"> <form method="post" asp-page-handler="@((Model.EditId.HasValue) ? "Edit" : "Add")"> <input type="hidden" asp-for="EditId" /> <div class="form-group"> <label for="ClassName">Class Name</label> <input type="text" class="form-control" id="ClassName" asp-for="ClassInfo.ClassName" required> <span asp-validation-for="ClassInfo.ClassName" class="text-danger"></span> </div> <div class="form-group"> <label for="StudentCount">Student Count</label> <input type="number" class="form-control" id="StudentCount" asp-for="ClassInfo.StudentCount" required> <span asp-validation-for="ClassInfo.StudentCount" class="text-danger"></span> </div> <div class="form-group"> <label for="Description">Description</label> <textarea class="form-control" id="Description" asp-for="ClassInfo.Description" required></textarea> <span asp-validation-for="ClassInfo.Description" class="text-danger"></span> </div> <button type="submit" class="btn btn-primary"> @(Model.EditId.HasValue ? "Edit" : "Add") </button> </form> </div> <div class="col-md-6"> <table class="table"> <thead> <tr> <th>Id</th> <th>Class Name</th> <th>Student Count</th> <th>Description</th> <th>Actions</th> </tr> </thead> <tbody> @foreach (var item in IndexModel.ClassInformationList) { <tr> <td>@item.Id</td> <td>@item.ClassName</td> <td>@item.StudentCount</td> <td>@item.Description</td> <td> <form method="get" style="display:inline;"> <button class="btn btn-sm btn-warning" asp-route-editId="@item.Id">Edit</button> </form> <form method="post" asp-page-handler="Delete" style="display:inline;"> <input type="hidden" name="deleteId" value="@item.Id" /> <button class="btn btn-sm btn-danger">Delete</button> </form> </td> </tr> } </tbody> </table> </div> </div> write a css file to beatify this html
+
+*/
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h3 {
+  color: #343a40;
+}
+
+.container {
+  margin: 20px auto;
+  max-width: 1200px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Form Styles */
+form {
+  margin-bottom: 20px;
+}
+
+form .form-group label {
+  font-weight: bold;
+  color: #495057;
+}
+
+form .form-control {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+form .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+form .btn-primary:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.text-danger {
+  font-size: 12px;
+  color: #dc3545;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+}
+
+table thead {
+  background-color: #007bff;
+  color: #ffffff;
+  text-align: left;
+}
+
+table th, table td {
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  font-size: 14px;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+table tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+table .btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+table .btn-warning {
+  color: #856404;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+table .btn-warning:hover {
+  background-color: #e0a800;
+}
+
+table .btn-danger {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+table .btn-danger:hover {
+  background-color: #bd2130;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .col-md-6 {
+      flex: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+  }
+
+  table {
+      font-size: 12px;
+  }
+}
