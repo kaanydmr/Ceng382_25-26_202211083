@@ -3,6 +3,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Week5.Models;
 using System.Collections.Generic;
 
+/*
+
+ 
+
+Promt:
+ 
+
+This task will be implemented on the Index page (Index.cshtml and Index.cshtml.cs). • Create a folder named Models inside the project folder (note: folder name is plural). • Inside this folder, create a class named ClassInformationModel.cs. • This class will store the following properties: o Id (auto-incremented) o ClassName o StudentCount o Description The Id property will be automatically incremented each time a new item is added to the list. The list will act like a simple in-memory database. Make index.cshtml.cs
+ 
+Promt2:
+
+can you fix the edit button to go back previous state after editing?
+*/
+
 namespace Week5.Pages
 {
     public class IndexModel : PageModel

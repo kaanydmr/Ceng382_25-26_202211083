@@ -1,5 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
+
+/*
+
+Promt:
+
+can you update my model to include some validation and make it work with page model?
+
+
+*/
 namespace Week5.Models
 {
     public class ClassInformationModel
