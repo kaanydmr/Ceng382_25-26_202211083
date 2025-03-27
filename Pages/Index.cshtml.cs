@@ -3,11 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Week5.Models;
 using System.Collections.Generic;
 
-/*
-Promt:
-This task will be implemented on the Index page (Index.cshtml and Index.cshtml.cs). • Create a folder named Models inside the project folder (note: folder name is plural). • Inside this folder, create a class named ClassInformationModel.cs. • This class will store the following properties: o Id (auto-incremented) o ClassName o StudentCount o Description The Id property will be automatically incremented each time a new item is added to the list. The list will act like a simple in-memory database. Make index.cshtml.cs
-*/
-
 namespace Week5.Pages
 {
     public class IndexModel : PageModel
@@ -17,8 +12,8 @@ namespace Week5.Pages
 
         public static List<ClassInformationModel> ClassInformationList { get; set; } = new();
 
-        [BindProperty]
-        public int? EditId { get; set; } // Used to determine editing state
+        [BindProperty(SupportsGet = true)]
+        public int? EditId { get; set; }
 
         public void OnGet(int? editId = null)
         {
@@ -27,7 +22,17 @@ namespace Week5.Pages
             if (EditId.HasValue)
             {
                 // Prefill form with data for editing
-                ClassInfo = ClassInformationList.Find(c => c.Id == EditId.Value) ?? new();
+                var existingItem = ClassInformationList.Find(c => c.Id == EditId.Value);
+                if (existingItem != null)
+                {
+                    ClassInfo = new ClassInformationModel
+                    {
+                        Id = existingItem.Id,
+                        ClassName = existingItem.ClassName,
+                        StudentCount = existingItem.StudentCount,
+                        Description = existingItem.Description
+                    };
+                }
             }
         }
 
@@ -36,8 +41,13 @@ namespace Week5.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            ClassInformationList.Add(ClassInfo); // Add new item
-            return RedirectToPage(); // Refresh the page
+            // Assign a unique ID
+            ClassInfo.Id = ClassInformationList.Count > 0 
+                ? ClassInformationList.Max(c => c.Id) + 1 
+                : 1;
+
+            ClassInformationList.Add(ClassInfo);
+            return RedirectToPage();
         }
 
         public IActionResult OnPostEdit()
@@ -53,22 +63,21 @@ namespace Week5.Pages
                 existingItem.Description = ClassInfo.Description;
             }
 
-            return RedirectToPage(); // Refresh the page
+            return RedirectToPage();
         }
 
         public IActionResult OnPostDelete(int deleteId)
         {
-            ClassInformationList.RemoveAll(c => c.Id == deleteId); // Delete item
-            return RedirectToPage(); // Refresh the page
+            ClassInformationList.RemoveAll(c => c.Id == deleteId);
+            return RedirectToPage();
         }
 
+        // Optional: Explicit Cancel method if you prefer
         public IActionResult OnPostCancel()
         {
-            EditId = null; // Clear the EditId to exit edit mode
-            ClassInfo = new ClassInformationModel(); // Reset the form fields for new submissions
-            return RedirectToPage(); // Refresh the page to reflect changes
+            EditId = null;
+            ClassInfo = new ClassInformationModel();
+            return RedirectToPage();
         }
-
-
     }
 }

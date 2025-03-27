@@ -1,82 +1,94 @@
-﻿@page "{editId?}"
+﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Class Management";
 }
-<!--
-    Promt:
-     Page Functionality • On the left side of the page, there will be a form that collects: o Class Name o Student Count o Description • On the right side, there will be a table that displays all the submitted class data. • The table will have the following columns: o Id o Class Name o Student Count o Description o Actions (Edit and Delete) The data should be validated and added to a static list each time the form is submitted. The data will then be displayed in the table. Step 4 – Requirements and Constraints • Use Bootstrap to create a responsive layout with two columns (form on the left, table on the right). • Use Razor Pages only; no JavaScript is allowed. • All operations (Add, Edit, Delete) must be handled using C# methods in the PageModel. • Form validation should be done using C# attributes like [Required], [Range], etc. • When editing, pre-fill the form with the selected item's data. • After deletion or editing, refresh the page and update the table accordingly. Create pagew in these gideliinez-->
-<div class="row">
-    <!-- Left Column: Form -->
-    <div class="col-md-6">
-        <form method="post" asp-page-handler="@((Model.EditId.HasValue) ? "Edit" : "Add")">
-            <input type="hidden" asp-for="EditId" />
 
-            <div class="form-group mb-3">
-                <label for="ClassName" class="form-label">Class Name</label>
-                <input type="text" class="form-control" id="ClassName" asp-for="ClassInfo.ClassName" required />
-                <span asp-validation-for="ClassInfo.ClassName" class="text-danger"></span>
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Left Column: Form -->
+        <div class="col-md-5 col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">@(Model.EditId.HasValue ? "Edit Class" : "Add New Class")</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-page-handler="@(Model.EditId.HasValue ? "Edit" : "Add")">
+                        <input type="hidden" asp-for="EditId" />
+
+                        <div class="mb-3">
+                            <label for="ClassName" class="form-label">Class Name</label>
+                            <input type="text" class="form-control" id="ClassName" asp-for="ClassInfo.ClassName" required />
+                            <span asp-validation-for="ClassInfo.ClassName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="StudentCount" class="form-label">Student Count</label>
+                            <input type="number" class="form-control" id="StudentCount" asp-for="ClassInfo.StudentCount" required />
+                            <span asp-validation-for="ClassInfo.StudentCount" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Description</label>
+                            <textarea class="form-control" id="Description" asp-for="ClassInfo.Description" rows="3" required></textarea>
+                            <span asp-validation-for="ClassInfo.Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                @(Model.EditId.HasValue ? "Update" : "Add")
+                            </button>
+
+                            @if (Model.EditId.HasValue)
+                            {
+                                <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+                            }
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
 
-            <div class="form-group mb-3">
-                <label for="StudentCount" class="form-label">Student Count</label>
-                <input type="number" class="form-control" id="StudentCount" asp-for="ClassInfo.StudentCount" required />
-                <span asp-validation-for="ClassInfo.StudentCount" class="text-danger"></span>
+        <!-- Right Column: Table -->
+        <div class="col-md-7 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Class List</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Class Name</th>
+                                    <th>Student Count</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in IndexModel.ClassInformationList)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.ClassName</td>
+                                        <td>@item.StudentCount</td>
+                                        <td>@item.Description</td>
+                                        <td>
+                                            <a asp-page="./Index" asp-route-editId="@item.Id" class="btn btn-sm btn-warning me-1">Edit</a>
+                                            <form method="post" asp-page-handler="Delete" style="display:inline;">
+                                                <input type="hidden" name="deleteId" value="@item.Id" />
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-group mb-3">
-                <label for="Description" class="form-label">Description</label>
-                <textarea class="form-control" id="Description" asp-for="ClassInfo.Description" required></textarea>
-                <span asp-validation-for="ClassInfo.Description" class="text-danger"></span>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">
-                @(Model.EditId.HasValue ? "Edit" : "Add")
-            </button>
-
-            <!-- Cancel Button (Visible in Edit Mode) -->
-            @if (Model.EditId.HasValue)
-            {
-                <form method="post" asp-page-handler="Cancel">
-                    <button type="submit" class="btn btn-secondary">Cancel</button>
-                </form>
-            }
-        </form>
-    </div>
-
-    <!-- Right Column: Table -->
-    <div class="col-md-6">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Class Name</th>
-                    <th>Student Count</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in IndexModel.ClassInformationList)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.ClassName</td>
-                        <td>@item.StudentCount</td>
-                        <td>@item.Description</td>
-                        <td>
-                            <form method="get" style="display:inline;">
-                                <button class="btn btn-sm btn-warning" asp-route-editId="@item.Id">Edit</button>
-                            </form>
-                            <form method="post" asp-page-handler="Delete" style="display:inline;">
-                                <input type="hidden" name="deleteId" value="@item.Id" />
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        </div>
     </div>
 </div>
