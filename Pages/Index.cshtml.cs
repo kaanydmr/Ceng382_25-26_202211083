@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Week5.Models;
+using Week5.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-
+using System.Text;
 /* 
 Promt1:
 This task will be implemented on the Index page (Index.cshtml and Index.cshtml.cs). • Create a folder named Models inside the project folder (note: folder name is plural). • Inside this folder, create a class named ClassInformationModel.cs. • This class will store the following properties: o Id (auto-incremented) o ClassName o StudentCount o Description The Id property will be automatically incremented each time a new item is added to the list. The list will act like a simple in-memory database. Make index.cshtml.cs
@@ -217,6 +219,36 @@ namespace Week5.Pages
             return RedirectToPage();
         }
         
+        public IActionResult OnPostExportJson()
+        {
+            // Export the entire list to JSON using the utility class
+            string jsonData = Utils.Instance.ExportToJson(ClassInformationList);
+
+            // Return JSON as a downloadable file
+            return File(System.Text.Encoding.UTF8.GetBytes(jsonData), "application/json", "Classes.json");
+        }
+
+
+        public IActionResult OnPostExportFilteredJson(string selectedColumns)
+        {
+            // Parse selected columns
+            var columns = selectedColumns?.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+
+            // Check if any columns were selected; if not, include all by default
+            if (columns == null || !columns.Any())
+            {
+                columns = new List<string> { "ClassName", "StudentCount", "Description" };
+            }
+
+            // Use JsonExportUtils to generate JSON based on the selected columns
+            string jsonFilteredData = Utils.Instance.ExportToJson(TableModel.Classes, columns);
+
+            // Return JSON as a downloadable file
+            return File(System.Text.Encoding.UTF8.GetBytes(jsonFilteredData), "application/json", "FilteredClasses.json");
+        }
+        
+
+
         private void GenerateSampleData()
         {
             var random = new Random();
