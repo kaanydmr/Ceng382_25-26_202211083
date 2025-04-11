@@ -7,11 +7,11 @@ namespace Week5.Models
     {
         public List<ClassInformationModel> Classes { get; set; } = new List<ClassInformationModel>();
         
-        // Filter properties
-        public string? FilterClassName { get; set; }
-        public int? FilterMinStudentCount { get; set; }
-        public int? FilterMaxStudentCount { get; set; }
-        public string? FilterDescription { get; set; }
+        // Single search filter
+        public string? SearchTerm { get; set; }
+        
+        // Selected columns for export
+        public List<string> SelectedColumns { get; set; } = new List<string>();
         
         // Pagination properties
         public int CurrentPage { get; set; } = 1;

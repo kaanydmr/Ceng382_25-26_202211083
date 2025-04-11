@@ -1,60 +1,83 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
+using System.Linq;
+using System.Reflection;
+
+
+
+/*
+
+ Promt:
+ Utility Class for JSON Export
+• Create a new C# class file named Utils.cs.
+• Inside it, implement a generic method that can export any class to JSON.
+• The method should work with any model class.
+• This class must be implemented as a singleton, so it can be accessed from anywhere in the
+project.
+
+
+
+*/
 
 namespace Week5.Utilities
 {
-    // Singleton implementation for JSON export utility
     public class Utils
     {
-        private static readonly Lazy<Utils> _instance = new Lazy<Utils>(() => new Utils());
-        
-        public static Utils Instance => _instance.Value;
-        
-        // Private constructor for singleton pattern
+        private static Utils _instance;
+        private static readonly object _lock = new object();
+
         private Utils() { }
-        
-        // Export any collection to JSON with optional column selection
-        public string ExportToJson<T>(IEnumerable<T> data, IEnumerable<string> selectedProperties = null)
+
+        public static Utils Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (_lock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new Utils();
+                        }
+                    }
+                }
+                return _instance;
+            }
+        }
+
+        public string ExportToJson<T>(IEnumerable<T> data, List<string> selectedColumns = null)
         {
             if (data == null)
                 return "[]";
-                
-            // If no columns are selected, export all properties
-            if (selectedProperties == null || !selectedProperties.Any())
+
+            if (selectedColumns == null || !selectedColumns.Any())
             {
-                return JsonSerializer.Serialize(data, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
+                // Export all properties if no columns selected
+                return JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
             }
-            
-            // If specific columns are selected, create custom objects with only those properties
-            var result = data.Select(item => 
+            else
             {
-                var type = typeof(T);
-                var properties = type.GetProperties();
-                var selectedPropertiesDict = new Dictionary<string, object>();
-                
-                foreach (var propName in selectedProperties)
-                {
-                    var property = properties.FirstOrDefault(p => 
-                        string.Equals(p.Name, propName, StringComparison.OrdinalIgnoreCase));
+                // Export only selected properties
+                var result = data.Select(item => {
+                    var type = typeof(T);
+                    var properties = type.GetProperties();
+                    var selectedProperties = new Dictionary<string, object>();
                     
-                    if (property != null)
+                    foreach (var prop in properties)
                     {
-                        selectedPropertiesDict[property.Name] = property.GetValue(item);
+                        if (selectedColumns.Contains(prop.Name))
+                        {
+                            selectedProperties[prop.Name] = prop.GetValue(item);
+                        }
                     }
-                }
+                    
+                    return selectedProperties;
+                });
                 
-                return selectedPropertiesDict;
-            });
-            
-            return JsonSerializer.Serialize(result, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+                return JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
+            }
         }
     }
 }

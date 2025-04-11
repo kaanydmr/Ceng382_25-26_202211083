@@ -85,6 +85,8 @@ return RedirectToPage();
  }
 }
 
+    Promt3:
+    Add a new method to export the data as JSON. This method should be called when the user clicks the "Export" button. The exported data should include only the selected columns and the search term (if any). The exported data should be in JSON format. You can use the JsonSerializer class from System.Text.Json namespace to serialize the data. The exported file should be named "ClassInformation.json".
 
 */
 
@@ -103,7 +105,15 @@ namespace Week5.Pages
         [BindProperty(SupportsGet = true)]
         public ClassInformationTable TableModel { get; set; } = new ClassInformationTable();
         
-        public void OnGet(int? editId = null)
+        // Available columns for selection
+        public List<string> AvailableColumns { get; set; } = new List<string> 
+        { 
+            "ClassName", 
+            "StudentCount", 
+            "Description"
+        };
+        
+        public void OnGet(int? editId = null, string[] selectedColumns = null)
         {
             // Generate sample data if list is empty (for testing pagination)
             if (ClassInformationList.Count == 0)
@@ -128,6 +138,12 @@ namespace Week5.Pages
                 }
             }
             
+            // Store selected columns
+            if (selectedColumns != null && selectedColumns.Length > 0)
+            {
+                TableModel.SelectedColumns = selectedColumns.ToList();
+            }
+            
             // Apply filtering and pagination
             ApplyFilteringAndPagination();
         }
@@ -137,27 +153,19 @@ namespace Week5.Pages
             // Start with all classes
             var filteredClasses = ClassInformationList.AsQueryable();
             
-            // Apply filters if they exist
-            if (!string.IsNullOrWhiteSpace(TableModel.FilterClassName))
+            // Apply universal search if term exists
+            if (!string.IsNullOrWhiteSpace(TableModel.SearchTerm))
             {
-                filteredClasses = filteredClasses.Where(c => c.ClassName != null && 
-                    c.ClassName.Contains(TableModel.FilterClassName, StringComparison.OrdinalIgnoreCase));
-            }
-            
-            if (TableModel.FilterMinStudentCount.HasValue)
-            {
-                filteredClasses = filteredClasses.Where(c => c.StudentCount >= TableModel.FilterMinStudentCount);
-            }
-            
-            if (TableModel.FilterMaxStudentCount.HasValue)
-            {
-                filteredClasses = filteredClasses.Where(c => c.StudentCount <= TableModel.FilterMaxStudentCount);
-            }
-            
-            if (!string.IsNullOrWhiteSpace(TableModel.FilterDescription))
-            {
-                filteredClasses = filteredClasses.Where(c => c.Description != null && 
-                    c.Description.Contains(TableModel.FilterDescription, StringComparison.OrdinalIgnoreCase));
+                string searchTerm = TableModel.SearchTerm.ToLower();
+                
+                // Check if search term is numeric
+                bool isNumeric = int.TryParse(searchTerm, out int numericValue);
+                
+                filteredClasses = filteredClasses.Where(c => 
+                    (c.ClassName != null && c.ClassName.ToLower().Contains(searchTerm)) ||
+                    (c.Description != null && c.Description.ToLower().Contains(searchTerm)) ||
+                    (isNumeric && c.StudentCount == numericValue)
+                );
             }
             
             // Store the total count before pagination
@@ -172,15 +180,27 @@ namespace Week5.Pages
         
         public IActionResult OnPostAdd()
         {
+            Console.WriteLine($"ClassInformationList size before adding: {ClassInformationList.Count}"); // Print size before adding
+
             if (!ModelState.IsValid)
+            {
+        
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
                 return Page();
+            }   
                 
             // Assign a unique ID
             ClassInfo.Id = ClassInformationList.Count > 0
                 ? ClassInformationList.Max(c => c.Id) + 1
                 : 1;
-                
+
             ClassInformationList.Add(ClassInfo);
+
+            Console.WriteLine($"ClassInformationList size after adding: {ClassInformationList.Count}"); // Print size after adding
+            
             return RedirectToPage();
         }
         
@@ -213,47 +233,52 @@ namespace Week5.Pages
             return RedirectToPage();
         }
         
-        public IActionResult OnPostFilter()
+        public IActionResult OnPostExport(string searchTerm, string[] selectedColumns)
         {
-            // Just redirect to get with the filter parameters
-            return RedirectToPage();
-        }
-        
-        public IActionResult OnPostExportJson()
-        {
-            // Export the entire list to JSON using the utility class
-            string jsonData = Utils.Instance.ExportToJson(ClassInformationList);
-
-            // Return JSON as a downloadable file
-            return File(System.Text.Encoding.UTF8.GetBytes(jsonData), "application/json", "Classes.json");
-        }
-
-
-        public IActionResult OnPostExportFilteredJson(string selectedColumns)
-        {
-            // Parse selected columns
-            var columns = selectedColumns?.Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
-
-            // Check if any columns were selected; if not, include all by default
-            if (columns == null || !columns.Any())
+            var dataToExport = string.IsNullOrWhiteSpace(searchTerm) 
+                ? ClassInformationList 
+                : FilterData(ClassInformationList, searchTerm);
+            
+            var utils = Utils.Instance;
+            var jsonData = utils.ExportToJson(dataToExport, selectedColumns?.ToList());
+            
+            return new ContentResult
             {
-                columns = new List<string> { "ClassName", "StudentCount", "Description" };
-            }
-
-            // Use JsonExportUtils to generate JSON based on the selected columns
-            string jsonFilteredData = Utils.Instance.ExportToJson(TableModel.Classes, columns);
-
-            // Return JSON as a downloadable file
-            return File(System.Text.Encoding.UTF8.GetBytes(jsonFilteredData), "application/json", "FilteredClasses.json");
+                Content = jsonData,
+                ContentType = "application/json",
+                StatusCode = 200
+            };
         }
         
-
-
+        private IEnumerable<ClassInformationModel> FilterData(IEnumerable<ClassInformationModel> data, string searchTerm)
+        {
+            string term = searchTerm.ToLower();
+            bool isNumeric = int.TryParse(term, out int numericValue);
+            
+            return data.Where(c => 
+                (c.ClassName != null && c.ClassName.ToLower().Contains(term)) ||
+                (c.Description != null && c.Description.ToLower().Contains(term)) ||
+                (isNumeric && c.StudentCount == numericValue) ||
+                (isNumeric && c.Id == numericValue)
+            );
+        }
+        
         private void GenerateSampleData()
         {
             var random = new Random();
             string[] subjects = { "Math", "Science", "English", "History", "Computer Science", "Physics", "Chemistry", "Biology", "Art", "Music" };
-            string[] levels = {"Beginner", "Elementary", "Pre-Intermediate", "Intermediate", "Upper-Intermediate",  "Advanced", "Proficient", "Expert", "Master", "Doctorate"};
+            string[] levels = { 
+                "Beginner", 
+                "Elementary", 
+                "Pre-Intermediate", 
+                "Intermediate", 
+                "Upper-Intermediate", 
+                "Advanced", 
+                "Proficient", 
+                "Expert", 
+                "Master", 
+                "Distinguished" 
+            };
             
             for (int i = 1; i <= 100; i++)
             {
