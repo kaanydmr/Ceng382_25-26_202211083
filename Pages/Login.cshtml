@@ -1,0 +1,79 @@
+@page
+@model Week5.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-gradient bg-primary text-white text-center py-4">
+                    <h2 class="mb-0">Welcome Back</h2>
+                    <p class="mb-0 small">Please sign in to continue</p>
+                </div>
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div class="form-floating mb-4">
+                            <input asp-for="Username" class="form-control" id="inputUsername" placeholder="Username" autocomplete="username" required />
+                            <label for="inputUsername">Username</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input asp-for="Password" type="password" class="form-control" id="inputPassword" placeholder="Password" autocomplete="current-password" required />
+                            <label for="inputPassword">Password</label>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm transition-all">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light py-3">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i> Use sample credentials to log in
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alert after 5 seconds
+        setTimeout(() => {
+            document.querySelectorAll('.alert').forEach(alert => {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+    <style>
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .btn.btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+        .card {
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+}
