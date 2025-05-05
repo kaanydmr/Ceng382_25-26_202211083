@@ -1,0 +1,258 @@
+@page
+@model Week5.Pages.Classes.IndexModel
+@{
+    ViewData["Title"] = "Classes";
+}
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Classes</h2>
+                <div>
+                    <span class="me-3">Welcome, @Model.Username (@Model.Role)</span>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassModal">
+                        Create New Class
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    @Model.StatusMessage
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Person Count</th>
+                                <th>Description</th>
+                                <th>Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ClassList)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.PersonCount</td>
+                                    <td>@item.Description</td>
+                                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary edit-class" 
+                                                data-id="@item.Id">Edit</button>
+                                        <button class="btn btn-sm btn-danger delete-class" 
+                                                data-id="@item.Id" 
+                                                data-name="@item.Name">Delete</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Class Modal -->
+<div class="modal fade" id="createClassModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Create">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Class</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="createName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="createName" asp-for="Class.Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createPersonCount" class="form-label">Person Count</label>
+                        <input type="number" class="form-control" id="createPersonCount" asp-for="Class.PersonCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="createDescription" asp-for="Class.Description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="createIsActive" asp-for="Class.IsActive" checked>
+                        <label class="form-check-label" for="createIsActive">Active</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Class Modal -->
+<div class="modal fade" id="editClassModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Update">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Class</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editId" asp-for="Class.Id">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editName" asp-for="Class.Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPersonCount" class="form-label">Person Count</label>
+                        <input type="number" class="form-control" id="editPersonCount" asp-for="Class.PersonCount" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editDescription" asp-for="Class.Description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="editIsActive" asp-for="Class.IsActive">
+                        <label class="form-check-label" for="editIsActive">Active</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View Class Modal -->
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteClassModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the class "<span id="deleteClassName"></span>"?</p>
+                    <input type="hidden" id="deleteId" name="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add anti-forgery token to AJAX requests
+        function addAntiForgeryToken() {
+            let token = document.querySelector('input[name="__RequestVerificationToken"]');
+            if (token) {
+                headers = {
+                    "RequestVerificationToken": token.value
+                };
+            }
+        }
+        
+        // Handle edit button click
+        document.querySelectorAll('.edit-class').forEach(button => {
+            button.addEventListener('click', function() {
+                const classId = this.getAttribute('data-id');
+                
+                // Fetch class details from database via AJAX
+                fetch(`?handler=ClassDetails&id=${classId}`)
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            const classData = result.data;
+                            
+                            // Populate the edit form with database values
+                            document.getElementById('editId').value = classData.id;
+                            document.getElementById('editName').value = classData.name;
+                            document.getElementById('editPersonCount').value = classData.personCount;
+                            document.getElementById('editDescription').value = classData.description;
+                            document.getElementById('editIsActive').checked = classData.isActive;
+                            
+                            // Show the modal
+                            const editModal = new bootstrap.Modal(document.getElementById('editClassModal'));
+                            editModal.show();
+                        } else {
+                            alert('Error: ' + result.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching class details:', error);
+                        alert('An error occurred while fetching class details.');
+                    });
+            });
+        });
+        
+        // Handle view button click
+        document.querySelectorAll('.view-class').forEach(button => {
+            button.addEventListener('click', function() {
+                // Get data attributes from the button
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                const count = this.getAttribute('data-count');
+                const desc = this.getAttribute('data-desc');
+                const active = this.getAttribute('data-active') === 'true' ? 'Yes' : 'No';
+                
+                // Populate the view modal
+                document.getElementById('viewId').textContent = id;
+                document.getElementById('viewName').textContent = name;
+                document.getElementById('viewPersonCount').textContent = count;
+                document.getElementById('viewDescription').textContent = desc || 'No description provided';
+                document.getElementById('viewIsActive').textContent = active;
+                
+                // Show the modal
+                const viewModal = new bootstrap.Modal(document.getElementById('viewClassModal'));
+                viewModal.show();
+            });
+        });
+        
+        // Handle delete button click
+        document.querySelectorAll('.delete-class').forEach(button => {
+            button.addEventListener('click', function() {
+                // Get data attributes from the button
+                const id = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+                
+                // Populate the delete confirmation modal
+                document.getElementById('deleteId').value = id;
+                document.getElementById('deleteClassName').textContent = name;
+                
+                // Show the modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteClassModal'));
+                deleteModal.show();
+            });
+        });
+    </script>
+}

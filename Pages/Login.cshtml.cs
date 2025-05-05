@@ -68,7 +68,7 @@ namespace Week5.Pages
             Response.Cookies.Append("session_id", sessionId, cookieOptions);
 
             // Redirect to the table page
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Classes/Index");
         }
 
         private string GenerateToken()

@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\c2211083\\Ceng382_25-26_202211083\\Week5.csproj": {}
+    "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj": {}
   },
   "projects": {
-    "C:\\Users\\c2211083\\Ceng382_25-26_202211083\\Week5.csproj": {
+    "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\c2211083\\Ceng382_25-26_202211083\\Week5.csproj",
+        "projectUniqueName": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj",
         "projectName": "Week5",
-        "projectPath": "C:\\Users\\c2211083\\Ceng382_25-26_202211083\\Week5.csproj",
-        "packagesPath": "C:\\Users\\c2211083\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\c2211083\\Ceng382_25-26_202211083\\obj\\",
+        "projectPath": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj",
+        "packagesPath": "/Users/kaan/.nuget/packages/",
+        "outputPath": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\c2211083\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/kaan/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,11 +32,38 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -58,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

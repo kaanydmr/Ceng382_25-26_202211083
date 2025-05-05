@@ -1,12 +1,18 @@
 using System;
 using Microsoft.AspNetCore.Http;
-using Week5.Services;
+using Microsoft.EntityFrameworkCore;
+using Week5.Data;
 using Week5.Middleware;
+using Week5.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Add and configure the database context
+builder.Services.AddDbContext<SchoolDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolDbConnection")));
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -19,10 +25,9 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
 
-// Register the UserService
+// Register the UserService with DB
 builder.Services.AddScoped<UserService>();
 
-// Build the app after registering all services
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
