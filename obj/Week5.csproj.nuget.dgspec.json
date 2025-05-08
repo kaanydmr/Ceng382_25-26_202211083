@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj": {}
+    "/Users/kaan/Desktop/CENG382/Ceng382_25-26_202211083/Week5.csproj": {}
   },
   "projects": {
-    "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj": {
+    "/Users/kaan/Desktop/CENG382/Ceng382_25-26_202211083/Week5.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj",
+        "projectUniqueName": "/Users/kaan/Desktop/CENG382/Ceng382_25-26_202211083/Week5.csproj",
         "projectName": "Week5",
-        "projectPath": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/Week5.csproj",
+        "projectPath": "/Users/kaan/Desktop/CENG382/Ceng382_25-26_202211083/Week5.csproj",
         "packagesPath": "/Users/kaan/.nuget/packages/",
-        "outputPath": "/Users/kaan/Desktop/test382/Ceng382_25-26_202211083/obj/",
+        "outputPath": "/Users/kaan/Desktop/CENG382/Ceng382_25-26_202211083/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/kaan/.nuget/NuGet/NuGet.Config"

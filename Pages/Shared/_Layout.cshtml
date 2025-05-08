@@ -24,6 +24,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Classes/Index">Classes</a>
+                        </li>
                         @if (Context.Session.GetString("username") != null)
                         {
                             <li class="nav-item">
