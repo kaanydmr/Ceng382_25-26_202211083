@@ -13,9 +13,12 @@ using System.IO;
 using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Week5.Pages.Classes
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly SchoolDbContext _context;
